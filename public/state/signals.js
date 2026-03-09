@@ -24,7 +24,7 @@ export const TYPE_COLORS = {
 
 // ── Helpers ───────────────────────────────────────────────────────
 export function isMobile() {
-  return window.matchMedia('(max-width: 768px)').matches;
+  return window.matchMedia('(max-width: 640px)').matches;
 }
 
 export function isToday(d) {
@@ -64,8 +64,23 @@ export const daySubLabel = computed(() => {
     + (isToday(d) ? ' \u00B7 Today' : '');
 });
 
-export const durBadge = computed(() =>
-  selectedDur.value >= 60 ? `${selectedDur.value / 60}h` : `${selectedDur.value}m`);
+// ── Phone models ──────────────────────────────────────────────────
+export const PHONE_MODELS = [
+  { key: 'generic-1080',   label: 'Generic 1080p',       w: 1080, h: 1920, group: null      },
+  { key: 'iphone-16-pm',   label: 'iPhone 16 Pro Max',   w: 1320, h: 2868, group: 'iPhone'  },
+  { key: 'iphone-16-pro',  label: 'iPhone 16 Pro',       w: 1206, h: 2622, group: 'iPhone'  },
+  { key: 'iphone-16-plus', label: 'iPhone 16 Plus',      w: 1284, h: 2778, group: 'iPhone'  },
+  { key: 'iphone-16',      label: 'iPhone 16',           w: 1179, h: 2556, group: 'iPhone'  },
+  { key: 'iphone-15-pm',   label: 'iPhone 15 Pro Max',   w: 1290, h: 2796, group: 'iPhone'  },
+  { key: 'iphone-15',      label: 'iPhone 15 / 14',      w: 1179, h: 2556, group: 'iPhone'  },
+  { key: 'iphone-se',      label: 'iPhone SE (3rd gen)', w:  750, h: 1334, group: 'iPhone'  },
+  { key: 's25-ultra',      label: 'Galaxy S25 Ultra',    w: 1440, h: 3088, group: 'Samsung' },
+  { key: 's25',            label: 'Galaxy S25 / S24',    w: 1080, h: 2340, group: 'Samsung' },
+  { key: 'pixel-9-xl',     label: 'Pixel 9 Pro XL',      w: 1344, h: 2992, group: 'Google'  },
+  { key: 'pixel-9',        label: 'Pixel 9',             w: 1080, h: 2424, group: 'Google'  },
+];
+
+export const phoneModel = signal('generic-1080');
 
 // ── Day navigation ────────────────────────────────────────────────
 export function shiftDay(n) {

@@ -40,6 +40,10 @@ body {
   grid-template-rows: 64px 1fr;
   height: 100vh;
   overflow: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
 }
 
 /* ── HEADER ─────────────────────────────────────────────────────── */
@@ -408,6 +412,31 @@ canvas#wallCanvas {
   display: block;
 }
 
+.phone-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.phone-selector label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--muted2);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.phone-selector select {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+.phone-selector select:focus { outline: none; border-color: var(--peak); }
+
 .dl-btn {
   display: block;
   text-align: center;
@@ -500,8 +529,8 @@ canvas#wallCanvas {
   outline-offset: 2px;
 }
 
-/* ── MOBILE (≤768px) ─────────────────────────────────────────────── */
-@media (max-width: 768px) {
+/* ── MOBILE (≤640px) ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
   body { overflow: hidden; }
 
   .app {
