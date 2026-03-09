@@ -29,6 +29,13 @@
     <button class="gen-btn" onclick="renderWallpaper()">&#8635; Refresh</button>
   </header>
 
+  <!-- MOBILE TAB BAR -->
+  <nav class="tab-bar">
+    <button class="tab-btn" data-tab="palette"  onclick="switchTab('palette')">Palette</button>
+    <button class="tab-btn" data-tab="timeline" onclick="switchTab('timeline')">Timeline</button>
+    <button class="tab-btn" data-tab="preview"  onclick="switchTab('preview')">Preview</button>
+  </nav>
+
   <!-- LEFT: PALETTE -->
   <aside class="palette">
 
@@ -52,19 +59,19 @@
 
     <div class="palette-section">
       <h3>Drag onto timeline</h3>
-      <div class="palette-block peak"     draggable="true" data-type="peak"     data-label="Deep Work"    ondragstart="paletteDragStart(event)">
+      <div class="palette-block peak"     draggable="true" data-type="peak"     data-label="Deep Work"    ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
         &#9670; Deep Work <span class="duration-badge" id="badge-peak"></span>
       </div>
-      <div class="palette-block focus"    draggable="true" data-type="focus"    data-label="Focus Work"   ondragstart="paletteDragStart(event)">
+      <div class="palette-block focus"    draggable="true" data-type="focus"    data-label="Focus Work"   ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
         &#9679; Focus Work <span class="duration-badge" id="badge-focus"></span>
       </div>
-      <div class="palette-block meetings" draggable="true" data-type="meetings" data-label="Meetings"     ondragstart="paletteDragStart(event)">
+      <div class="palette-block meetings" draggable="true" data-type="meetings" data-label="Meetings"     ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
         &#9678; Meetings <span class="duration-badge" id="badge-meetings"></span>
       </div>
-      <div class="palette-block admin"    draggable="true" data-type="admin"    data-label="Email &amp; Admin" ondragstart="paletteDragStart(event)">
+      <div class="palette-block admin"    draggable="true" data-type="admin"    data-label="Email &amp; Admin" ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
         &#9635; Admin <span class="duration-badge" id="badge-admin"></span>
       </div>
-      <div class="palette-block buffer"   draggable="true" data-type="buffer"   data-label="Buffer"       ondragstart="paletteDragStart(event)">
+      <div class="palette-block buffer"   draggable="true" data-type="buffer"   data-label="Buffer"       ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
         &#9675; Buffer / Break <span class="duration-badge" id="badge-buffer"></span>
       </div>
     </div>
@@ -84,6 +91,7 @@
 
   <!-- CENTRE: TIMELINE -->
   <main class="timeline-wrap" id="timelineWrap">
+    <div class="tap-hint hidden" id="tapHint"></div>
     <div class="timeline" id="timeline">
       <div class="drop-ghost" id="dropGhost"></div>
       <div class="empty-state" id="emptyState">

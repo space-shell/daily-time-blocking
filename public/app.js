@@ -35,6 +35,9 @@ let dragging       = null;
 let dragOffsetSlot = 0;
 let resizing       = null;
 
+// tap-to-place state (mobile)
+let tapSelected = null; // { el, type, label }
+
 // ── LOCAL STORAGE ─────────────────────────────────────────────────
 function saveToStorage() {
   try {
@@ -118,11 +121,76 @@ function onIntentionInput() {
   renderWallpaper();
 }
 
+// ── MOBILE HELPERS ────────────────────────────────────────────────
+function isMobile() {
+  return window.matchMedia('(max-width: 768px)').matches;
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.tab === tabName)
+  );
+  document.querySelector('.palette').classList.toggle('tab-active', tabName === 'palette');
+  document.querySelector('.timeline-wrap').classList.toggle('tab-active', tabName === 'timeline');
+  document.querySelector('.preview-panel').classList.toggle('tab-active', tabName === 'preview');
+}
+
+function paletteTap(el) {
+  if (!isMobile()) return;
+  if (tapSelected && tapSelected.el === el) {
+    // deselect
+    el.classList.remove('tap-selected');
+    tapSelected = null;
+    updateTapHint();
+    return;
+  }
+  document.querySelectorAll('.palette-block').forEach(b => b.classList.remove('tap-selected'));
+  el.classList.add('tap-selected');
+  tapSelected = { el, type: el.dataset.type, label: el.dataset.label };
+  switchTab('timeline');
+  updateTapHint();
+}
+
+function updateTapHint() {
+  const hint = document.getElementById('tapHint');
+  if (!hint) return;
+  if (tapSelected) {
+    hint.textContent = 'Tap a time slot to place ' + tapSelected.label;
+    hint.classList.remove('hidden');
+  } else {
+    hint.classList.add('hidden');
+  }
+}
+
+function zoneTap(e) {
+  if (!isMobile() || !tapSelected) return;
+  const slot = parseInt(e.currentTarget.dataset.slot);
+  const durSlots = selectedDur / SLOT_MIN;
+  const targetSlot = Math.max(0, Math.min(slot, SLOTS - durSlots));
+  const startMin = DAY_START + targetSlot * SLOT_MIN;
+  getBlocks().push({
+    id: Math.random().toString(36).slice(2),
+    type: tapSelected.type,
+    label: tapSelected.label,
+    startMin,
+    durMin: selectedDur,
+  });
+  tapSelected.el.classList.remove('tap-selected');
+  tapSelected = null;
+  updateTapHint();
+  renderBlocks();
+  checkEmpty();
+  saveToStorage();
+  renderWallpaper();
+}
+
 // ── TIMELINE BUILD ────────────────────────────────────────────────
 function buildTimeline() {
   const tl = document.getElementById('timeline');
+  const emptyMsg  = isMobile() ? 'Tap a block,<br>then tap a time slot' : 'Drag a block from the left<br>onto the timeline';
+  const emptyHint = isMobile() ? '' : 'blocks snap to 30-minute slots';
   tl.innerHTML = '<div class="drop-ghost" id="dropGhost"></div>'
-    + '<div class="empty-state" id="emptyState"><p>Drag a block from the left<br>onto the timeline</p><span>blocks snap to 30-minute slots</span></div>';
+    + `<div class="empty-state" id="emptyState"><p>${emptyMsg}</p><span>${emptyHint}</span></div>`;
 
   for (let s = 0; s < SLOTS + 1; s++) {
     const min = DAY_START + s * SLOT_MIN;
@@ -139,10 +207,12 @@ function buildTimeline() {
     zone.addEventListener('dragover',  zoneDragOver);
     zone.addEventListener('dragleave', zoneDragLeave);
     zone.addEventListener('drop',      zoneDrop);
+    zone.addEventListener('click',     zoneTap);
   });
 
   renderBlocks();
   checkEmpty();
+  updateTapHint();
 }
 
 function renderBlocks() {
@@ -173,9 +243,10 @@ function renderBlocks() {
       <div class="resize-handle" data-id="${block.id}"></div>
     `;
 
-    el.draggable = true;
+    el.draggable = !isMobile();
     el.addEventListener('dragstart', placedDragStart);
     el.querySelector('.resize-handle').addEventListener('mousedown', resizeStart);
+    el.querySelector('.resize-handle').addEventListener('touchstart', resizeTouchStart, { passive: false });
 
     tl.appendChild(el);
   });
@@ -202,6 +273,7 @@ function updateBadges() {
 
 // ── PALETTE DRAG ─────────────────────────────────────────────────
 function paletteDragStart(e) {
+  if (isMobile()) { e.preventDefault(); return; }
   const el = e.currentTarget;
   dragging = { source: 'palette', type: el.dataset.type, label: el.dataset.label, dur: selectedDur };
   dragOffsetSlot = 0;
@@ -221,6 +293,7 @@ function placedDragStart(e) {
 }
 
 function showGhost(type, label, e) {
+  if (isMobile()) return;
   const ghost = document.getElementById('dragGhost');
   ghost.textContent = label;
   ghost.style.background = TYPE_COLORS[type] || '#555';
@@ -334,6 +407,37 @@ function resizeEnd() {
   resizing = null;
   document.removeEventListener('mousemove', resizeMove);
   document.removeEventListener('mouseup',   resizeEnd);
+  saveToStorage();
+  renderWallpaper();
+}
+
+function resizeTouchStart(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  const touch = e.touches[0];
+  const block = getBlocks().find(b => b.id === e.currentTarget.dataset.id);
+  if (!block) return;
+  resizing = { id: block.id, startY: touch.clientY, origDur: block.durMin };
+  document.addEventListener('touchmove', resizeTouchMove, { passive: false });
+  document.addEventListener('touchend',  resizeTouchEnd);
+}
+
+function resizeTouchMove(e) {
+  if (!resizing) return;
+  e.preventDefault();
+  const touch = e.touches[0];
+  const block = getBlocks().find(b => b.id === resizing.id);
+  if (!block) return;
+  const addSlots = Math.round((touch.clientY - resizing.startY) / SLOT_H);
+  const newDur   = Math.max(SLOT_MIN, resizing.origDur + addSlots * SLOT_MIN);
+  block.durMin   = Math.min(newDur, DAY_END - block.startMin);
+  renderBlocks();
+}
+
+function resizeTouchEnd() {
+  resizing = null;
+  document.removeEventListener('touchmove', resizeTouchMove);
+  document.removeEventListener('touchend',  resizeTouchEnd);
   saveToStorage();
   renderWallpaper();
 }
@@ -520,3 +624,9 @@ syncIntentionInput();
 buildTimeline();
 updateBadges();
 renderWallpaper();
+if (isMobile()) {
+  switchTab('palette');
+  document.querySelectorAll('.palette-section h3').forEach(h => {
+    if (h.textContent.toLowerCase().includes('drag')) h.textContent = 'Tap to select';
+  });
+}
