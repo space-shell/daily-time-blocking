@@ -40,6 +40,10 @@ body {
   grid-template-rows: 64px 1fr;
   height: 100vh;
   overflow: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
 }
 
 /* ── HEADER ─────────────────────────────────────────────────────── */
