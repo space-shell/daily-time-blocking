@@ -41,9 +41,5 @@ function PaletteBlock({ type, label, icon }) {
 }
 
 export default function PaletteBlockList() {
-  return html`
-    <>
-      ${BLOCKS.map(b => html`<${PaletteBlock} key=${b.type} ...${b} />`)}
-    </>
-  `;
+  return BLOCKS.map(b => html`<${PaletteBlock} key=${b.type} ...${b} />`);
 }
