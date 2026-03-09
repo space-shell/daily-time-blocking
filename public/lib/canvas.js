@@ -1,7 +1,7 @@
 import {
   currentDate, blocks, intention, currentTheme,
   THEMES, TYPE_COLORS, DAY_START, DAY_END,
-  dlHref,
+  dlHref, phoneModel, PHONE_MODELS,
 } from '../state/signals.js';
 
 export function minToTime(min) {
@@ -15,23 +15,31 @@ export function minToTime(min) {
 export function renderWallpaper() {
   const canvas = document.getElementById('wallCanvas');
   if (!canvas) return;
+
+  const model  = PHONE_MODELS.find(m => m.key === phoneModel.value) ?? PHONE_MODELS[0];
+  canvas.width  = model.w;
+  canvas.height = model.h;
+
   const ctx   = canvas.getContext('2d');
-  const W = 1080, H = 1920;
+  const scale = model.w / 1080;
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  const W  = 1080;
+  const LH = Math.round(model.h / scale);
   const theme = THEMES[currentTheme.value];
 
   // Background
-  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  const bg = ctx.createLinearGradient(0, 0, 0, LH);
   bg.addColorStop(0, theme.bg1);
   bg.addColorStop(1, theme.bg2);
   ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillRect(0, 0, W, LH);
 
   // Grain
   for (let i = 0; i < 6000; i++) {
     ctx.fillStyle = theme.isDark
       ? `rgba(255,255,255,${Math.random() * 0.012})`
       : `rgba(0,0,0,${Math.random() * 0.015})`;
-    ctx.fillRect(Math.random() * W, Math.random() * H, 1.2, 1.2);
+    ctx.fillRect(Math.random() * W, Math.random() * LH, 1.2, 1.2);
   }
 
   // Accent bar
@@ -66,7 +74,7 @@ export function renderWallpaper() {
   // Timeline layout
   const sorted   = blocks.value.slice().sort((a, b) => a.startMin - b.startMin);
   const tlTop    = 380;
-  const tlH      = H - tlTop - 120;
+  const tlH      = LH - tlTop - 120;
   const totalMin = DAY_END - DAY_START;
 
   // Hour lines
@@ -120,7 +128,7 @@ export function renderWallpaper() {
   // Footer
   ctx.fillStyle = theme.muted;
   ctx.font = '400 26px "DM Mono", monospace';
-  ctx.fillText('buffer = transition time, not wasted time', 100, H - 60);
+  ctx.fillText('buffer = transition time, not wasted time', 100, LH - 60);
 
   dlHref.value = canvas.toDataURL('image/png');
 }

@@ -1,4 +1,4 @@
-import { days, intentions, currentTheme, selectedDur, THEMES } from '../state/signals.js';
+import { days, intentions, currentTheme, THEMES, phoneModel, PHONE_MODELS } from '../state/signals.js';
 
 export function loadFromStorage() {
   try {
@@ -11,7 +11,7 @@ export function loadFromStorage() {
     const t = localStorage.getItem('tb_theme');
     if (t && THEMES[t]) currentTheme.value = t;
 
-    const dur = localStorage.getItem('tb_dur');
-    if (dur) selectedDur.value = parseInt(dur) || 60;
+    const p = localStorage.getItem('tb_phone');
+    if (p && PHONE_MODELS.find(m => m.key === p)) phoneModel.value = p;
   } catch (e) {}
 }

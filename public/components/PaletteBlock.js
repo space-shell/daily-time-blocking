@@ -1,5 +1,5 @@
 import { html } from 'htm/preact';
-import { durBadge, tapSelected, activeTab, isMobile } from '../state/signals.js';
+import { tapSelected, activeTab, isMobile } from '../state/signals.js';
 import { paletteDragStart } from '../lib/drag.js';
 
 const BLOCKS = [
@@ -35,7 +35,6 @@ function PaletteBlock({ type, label, icon }) {
       onClick=${handleClick}
     >
       ${icon} ${label}
-      <span class="duration-badge">${durBadge.value}</span>
     </div>
   `;
 }

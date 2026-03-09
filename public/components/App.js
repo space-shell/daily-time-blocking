@@ -2,9 +2,10 @@ import { html }      from 'htm/preact';
 import { useEffect }  from 'preact/hooks';
 import {
   dayLabel, daySubLabel, shiftDay, goToday,
-  selectedDur, intention, setIntention,
+  intention, setIntention,
   currentTheme, activeTab, tapSelected,
   dlHref, isMobile, THEMES,
+  phoneModel, PHONE_MODELS,
 } from '../state/signals.js';
 import { renderWallpaper } from '../lib/canvas.js';
 import { onDragEnd }       from '../lib/drag.js';
@@ -51,13 +52,6 @@ function MobileTabBar() {
 }
 
 // ── Palette panel ─────────────────────────────────────────────────
-const DUR_OPTIONS = [
-  { dur: 30, label: '30 min' },
-  { dur: 60, label: '1 hr'   },
-  { dur: 90, label: '1.5 hr' },
-  { dur: 120, label: '2 hr'  },
-];
-
 function PalettePanel() {
   const isActive  = !isMobile() || activeTab.value === 'palette';
   const dragLabel = isMobile() ? 'Tap to select' : 'Drag onto timeline';
@@ -80,21 +74,6 @@ function PalettePanel() {
             value=${intention.value}
             onInput=${handleIntentionInput}
           />
-        </div>
-      </div>
-
-      <div class="palette-section">
-        <h3>Block duration</h3>
-        <div class="duration-selector">
-          ${DUR_OPTIONS.map(({ dur, label }) => html`
-            <button
-              key=${dur}
-              class=${`dur-btn${selectedDur.value === dur ? ' active' : ''}`}
-              onClick=${() => { selectedDur.value = dur; }}
-            >
-              ${label}
-            </button>
-          `)}
         </div>
       </div>
 
@@ -156,6 +135,25 @@ function PreviewPanel() {
         </div>
       </div>
       <div class="preview-scroll">
+        <div class="phone-selector">
+          <label>Phone</label>
+          <select value=${phoneModel.value}
+                  onChange=${e => { phoneModel.value = e.target.value; renderWallpaper(); }}>
+            <option value="generic-1080">Generic 1080p</option>
+            <optgroup label="iPhone">
+              ${PHONE_MODELS.filter(m => m.group === 'iPhone').map(m =>
+                html`<option key=${m.key} value=${m.key}>${m.label}</option>`)}
+            </optgroup>
+            <optgroup label="Samsung">
+              ${PHONE_MODELS.filter(m => m.group === 'Samsung').map(m =>
+                html`<option key=${m.key} value=${m.key}>${m.label}</option>`)}
+            </optgroup>
+            <optgroup label="Google">
+              ${PHONE_MODELS.filter(m => m.group === 'Google').map(m =>
+                html`<option key=${m.key} value=${m.key}>${m.label}</option>`)}
+            </optgroup>
+          </select>
+        </div>
         <a class="dl-btn" id="dlBtn" href=${dlHref.value} download="timeblock.png">
           \u2193 Save to phone
         </a>

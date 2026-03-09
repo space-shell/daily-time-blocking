@@ -412,6 +412,31 @@ canvas#wallCanvas {
   display: block;
 }
 
+.phone-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.phone-selector label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--muted2);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.phone-selector select {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+.phone-selector select:focus { outline: none; border-color: var(--peak); }
+
 .dl-btn {
   display: block;
   text-align: center;
