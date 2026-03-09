@@ -500,8 +500,8 @@ canvas#wallCanvas {
   outline-offset: 2px;
 }
 
-/* ── MOBILE (≤768px) ─────────────────────────────────────────────── */
-@media (max-width: 768px) {
+/* ── MOBILE (≤640px) ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
   body { overflow: hidden; }
 
   .app {
