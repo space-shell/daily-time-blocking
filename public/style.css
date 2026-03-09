@@ -28,10 +28,13 @@ body {
   overflow: hidden;
 }
 
-/* App shell — grid container with max-width */
+#root {
+  width: min(100%, 1024px);
+}
+
+/* App shell — grid container */
 .app {
   width: 100%;
-  max-width: 1400px;
   display: grid;
   grid-template-columns: 260px 1fr 320px;
   grid-template-rows: 64px 1fr;
