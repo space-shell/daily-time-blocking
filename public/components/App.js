@@ -67,7 +67,7 @@ function PalettePanel() {
   }
 
   return html`
-    <aside class=${`palette${isMobile() && activeTab.value === 'palette' ? ' tab-active' : ''}`}>
+    <aside class=${`palette${activeTab.value === 'palette' ? ' tab-active' : ''}`}>
 
       <div class="palette-section">
         <h3>Focus intention</h3>
@@ -121,7 +121,7 @@ function PalettePanel() {
 // ── Timeline panel ────────────────────────────────────────────────
 function TimelinePanel() {
   return html`
-    <main class=${`timeline-wrap${isMobile() && activeTab.value === 'timeline' ? ' tab-active' : ''}`} id="timelineWrap">
+    <main class=${`timeline-wrap${activeTab.value === 'timeline' ? ' tab-active' : ''}`} id="timelineWrap">
       <div class=${`tap-hint${tapSelected.value ? '' : ' hidden'}`} id="tapHint">
         ${tapSelected.value ? `Tap a time slot to place ${tapSelected.value.label}` : ''}
       </div>
@@ -140,7 +140,7 @@ const THEME_DOTS = [
 
 function PreviewPanel() {
   return html`
-    <aside class=${`preview-panel${isMobile() && activeTab.value === 'preview' ? ' tab-active' : ''}`}>
+    <aside class=${`preview-panel${activeTab.value === 'preview' ? ' tab-active' : ''}`}>
       <div class="preview-panel-header">
         <h3>Wallpaper preview</h3>
         <div class="theme-dots">
