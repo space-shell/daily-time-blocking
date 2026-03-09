@@ -24,7 +24,7 @@ export const TYPE_COLORS = {
 
 // ── Helpers ───────────────────────────────────────────────────────
 export function isMobile() {
-  return window.matchMedia('(max-width: 768px)').matches;
+  return window.matchMedia('(max-width: 640px)').matches;
 }
 
 export function isToday(d) {
