@@ -6,123 +6,21 @@
   <title>Time Blocks</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "preact":           "https://esm.sh/preact@10.26.1",
+      "preact/hooks":     "https://esm.sh/preact@10.26.1/hooks",
+      "preact/compat":    "https://esm.sh/preact@10.26.1/compat",
+      "@preact/signals":  "https://esm.sh/@preact/signals@1.3.2",
+      "htm/preact":       "https://esm.sh/htm@3.1.1/preact"
+    }
+  }
+  </script>
 </head>
 <body>
-
-<div class="app">
-
-  <!-- DRAG GHOST (fixed positioning, outside grid flow) -->
-  <div id="dragGhost"></div>
-
-  <!-- HEADER -->
-  <header>
-    <h1>Time Blocks</h1>
-    <div class="day-nav">
-      <button onclick="shiftDay(-1)">&#8249;</button>
-      <div>
-        <div class="day-display" id="dayDisplay"></div>
-        <div class="day-display day-sub" id="daySubDisplay"></div>
-      </div>
-      <button onclick="shiftDay(1)">&#8250;</button>
-      <button class="today-btn" onclick="goToday()">Today</button>
-    </div>
-    <button class="gen-btn" onclick="renderWallpaper()">&#8635; Refresh</button>
-  </header>
-
-  <!-- MOBILE TAB BAR -->
-  <nav class="tab-bar">
-    <button class="tab-btn" data-tab="palette"  onclick="switchTab('palette')">Palette</button>
-    <button class="tab-btn" data-tab="timeline" onclick="switchTab('timeline')">Timeline</button>
-    <button class="tab-btn" data-tab="preview"  onclick="switchTab('preview')">Preview</button>
-  </nav>
-
-  <!-- LEFT: PALETTE -->
-  <aside class="palette">
-
-    <div class="palette-section">
-      <h3>Focus intention</h3>
-      <div class="intention-input">
-        <label>Today's priority</label>
-        <input type="text" id="intentionInput" placeholder="Ship the draft before lunch&hellip;" oninput="onIntentionInput()">
-      </div>
-    </div>
-
-    <div class="palette-section">
-      <h3>Block duration</h3>
-      <div class="duration-selector">
-        <button class="dur-btn" data-dur="30"  onclick="selectDur(this)">30 min</button>
-        <button class="dur-btn active" data-dur="60"  onclick="selectDur(this)">1 hr</button>
-        <button class="dur-btn" data-dur="90"  onclick="selectDur(this)">1.5 hr</button>
-        <button class="dur-btn" data-dur="120" onclick="selectDur(this)">2 hr</button>
-      </div>
-    </div>
-
-    <div class="palette-section">
-      <h3>Drag onto timeline</h3>
-      <div class="palette-block peak"     draggable="true" data-type="peak"     data-label="Deep Work"    ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
-        &#9670; Deep Work <span class="duration-badge" id="badge-peak"></span>
-      </div>
-      <div class="palette-block focus"    draggable="true" data-type="focus"    data-label="Focus Work"   ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
-        &#9679; Focus Work <span class="duration-badge" id="badge-focus"></span>
-      </div>
-      <div class="palette-block meetings" draggable="true" data-type="meetings" data-label="Meetings"     ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
-        &#9678; Meetings <span class="duration-badge" id="badge-meetings"></span>
-      </div>
-      <div class="palette-block admin"    draggable="true" data-type="admin"    data-label="Email &amp; Admin" ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
-        &#9635; Admin <span class="duration-badge" id="badge-admin"></span>
-      </div>
-      <div class="palette-block buffer"   draggable="true" data-type="buffer"   data-label="Buffer"       ondragstart="paletteDragStart(event)" onclick="paletteTap(this)">
-        &#9675; Buffer / Break <span class="duration-badge" id="badge-buffer"></span>
-      </div>
-    </div>
-
-    <div class="palette-section">
-      <h3>Legend</h3>
-      <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.65rem;color:var(--muted2)">
-        <div><span style="color:var(--peak)">&#9670;</span> Peak &mdash; best cognitive work</div>
-        <div><span style="color:var(--focus)">&#9679;</span> Focus &mdash; steady effort</div>
-        <div><span style="color:var(--meetings)">&#9678;</span> Meetings &mdash; social energy</div>
-        <div><span style="color:var(--admin)">&#9635;</span> Admin &mdash; low-effort tasks</div>
-        <div><span style="color:var(--muted2)">&#9675;</span> Buffer &mdash; transition time</div>
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- CENTRE: TIMELINE -->
-  <main class="timeline-wrap" id="timelineWrap">
-    <div class="tap-hint hidden" id="tapHint"></div>
-    <div class="timeline" id="timeline">
-      <div class="drop-ghost" id="dropGhost"></div>
-      <div class="empty-state" id="emptyState">
-        <p>Drag a block from the left<br>onto the timeline</p>
-        <span>blocks snap to 30-minute slots</span>
-      </div>
-    </div>
-  </main>
-
-  <!-- RIGHT: WALLPAPER PREVIEW -->
-  <aside class="preview-panel">
-    <div class="preview-panel-header">
-      <h3>Wallpaper preview</h3>
-      <div class="theme-dots">
-        <div class="theme-dot active" style="background:#0e0e0e;border-color:var(--peak)" data-theme="dark"   onclick="selectTheme(this)"></div>
-        <div class="theme-dot"        style="background:#0a1628"                          data-theme="navy"   onclick="selectTheme(this)"></div>
-        <div class="theme-dot"        style="background:#1a0a2e"                          data-theme="purple" onclick="selectTheme(this)"></div>
-        <div class="theme-dot"        style="background:#f0ebe0"                          data-theme="paper"  onclick="selectTheme(this)"></div>
-      </div>
-    </div>
-    <div class="preview-scroll">
-      <a class="dl-btn" id="dlBtn" href="#" download="timeblock.png">&#8595; Save to phone</a>
-      <canvas id="wallCanvas" width="1080" height="1920"></canvas>
-      <div class="hint-box">
-        <strong>MacroDroid tip:</strong> always save as the same filename. MacroDroid applies it at 8:50am automatically &mdash; so it's waiting on your screen when you arrive at work.
-      </div>
-    </div>
-  </aside>
-
-</div><!-- /.app -->
-
-<script src="app.js"></script>
+  <div id="root"></div>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
