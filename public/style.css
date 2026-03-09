@@ -112,6 +112,7 @@ header h1 {
 .today-btn:hover { border-color: var(--peak); color: var(--peak); }
 
 .gen-btn {
+  margin-left: auto;
   background: var(--peak);
   color: #0e0e0e;
   border: none;
@@ -329,6 +330,7 @@ header h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: none;
 }
 .resize-handle::after {
   content: '';
@@ -514,7 +516,6 @@ canvas#wallCanvas {
     flex-shrink: 0;
   }
   header h1 { display: none; }
-  .day-nav { margin-left: 0; }
   .day-display { min-width: 0; font-size: 0.7rem; }
   .day-sub { display: none; }
 

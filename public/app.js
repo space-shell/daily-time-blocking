@@ -2,7 +2,7 @@
 const SLOT_H    = 60;
 const SLOT_MIN  = 30;
 const DAY_START = 9 * 60;
-const DAY_END   = 17 * 60;
+const DAY_END   = 20 * 60;
 const SLOTS     = (DAY_END - DAY_START) / SLOT_MIN; // 16
 
 const THEMES = {
@@ -529,7 +529,7 @@ function renderWallpaper() {
   const totalMin = DAY_END - DAY_START;
 
   // Hour lines
-  for (let h = 9; h <= 17; h++) {
+  for (let h = 9; h <= 20; h++) {
     const y = tlTop + ((h * 60 - DAY_START) / totalMin) * tlH;
     ctx.strokeStyle = theme.muted;
     ctx.lineWidth = 0.5;
