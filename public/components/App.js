@@ -6,6 +6,7 @@ import {
   currentTheme, activeTab, tapSelected,
   dlHref, isMobile, THEMES,
   phoneModel, PHONE_MODELS,
+  settingsOpen, blockSettings, BLOCK_TYPES, BLOCK_ICONS, BLOCK_COLOR_VARS, imgPrefix,
 } from '../state/signals.js';
 import { renderWallpaper } from '../lib/canvas.js';
 import { onDragEnd }       from '../lib/drag.js';
@@ -13,6 +14,7 @@ import { downloadICS }     from '../lib/calendar.js';
 import DragGhost           from './DragGhost.js';
 import PaletteBlockList    from './PaletteBlock.js';
 import Timeline            from './Timeline.js';
+import Settings            from './Settings.js';
 
 // ── Header ────────────────────────────────────────────────────────
 function AppHeader() {
@@ -86,12 +88,19 @@ function PalettePanel() {
       <div class="palette-section">
         <h3>Legend</h3>
         <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.65rem;color:var(--muted2)">
-          <div><span style="color:var(--peak)">\u25C6</span> Peak \u2014 best cognitive work</div>
-          <div><span style="color:var(--focus)">\u25CF</span> Focus \u2014 steady effort</div>
-          <div><span style="color:var(--meetings)">\u25CE</span> Meetings \u2014 social energy</div>
-          <div><span style="color:var(--admin)">\u25A3</span> Admin \u2014 low-effort tasks</div>
-          <div><span style="color:var(--muted2)">\u25CB</span> Buffer \u2014 transition time</div>
+          ${BLOCK_TYPES.map(type => {
+            const { label, hint } = blockSettings.value[type];
+            return html`
+              <div key=${type}>
+                <span style=${{ color: BLOCK_COLOR_VARS[type] }}>${BLOCK_ICONS[type]}</span>
+                ${' '}${label} \u2014 ${hint}
+              </div>
+            `;
+          })}
         </div>
+        <button class="settings-open-btn" onClick=${() => settingsOpen.value = true}>
+          \u2699 Settings
+        </button>
       </div>
 
     </aside>
@@ -136,6 +145,9 @@ function PreviewPanel() {
         </div>
       </div>
       <div class="preview-scroll">
+        <button class="dl-btn cal-btn" onClick=${downloadICS}>
+          \u2193 Export to calendar (.ics)
+        </button>
         <div class="phone-selector">
           <label>Phone</label>
           <select value=${phoneModel.value}
@@ -155,10 +167,7 @@ function PreviewPanel() {
             </optgroup>
           </select>
         </div>
-        <button class="dl-btn cal-btn" onClick=${downloadICS}>
-          \u2193 Export to calendar (.ics)
-        </button>
-        <a class="dl-btn" id="dlBtn" href=${dlHref.value} download="timeblock.png">
+        <a class="dl-btn" id="dlBtn" href=${dlHref.value} download=${`${imgPrefix.value}.png`}>
           \u2193 Save to phone
         </a>
         <canvas id="wallCanvas" width="1080" height="1920"></canvas>
@@ -192,6 +201,7 @@ export default function App() {
       <${PalettePanel} />
       <${TimelinePanel} />
       <${PreviewPanel} />
+      <${Settings} />
     </div>
   `;
 }

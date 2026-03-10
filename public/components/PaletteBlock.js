@@ -1,16 +1,10 @@
 import { html } from 'htm/preact';
-import { tapSelected, activeTab, isMobile } from '../state/signals.js';
+import { tapSelected, activeTab, isMobile, blockSettings, BLOCK_TYPES, BLOCK_ICONS } from '../state/signals.js';
 import { paletteDragStart } from '../lib/drag.js';
 
-const BLOCKS = [
-  { type: 'peak',     label: 'Deep Work',      icon: '\u25C6' },
-  { type: 'focus',    label: 'Focus Work',      icon: '\u25CF' },
-  { type: 'meetings', label: 'Meetings',        icon: '\u25CE' },
-  { type: 'admin',    label: 'Email \u0026 Admin', icon: '\u25A3' },
-  { type: 'buffer',   label: 'Buffer / Break',  icon: '\u25CB' },
-];
-
-function PaletteBlock({ type, label, icon }) {
+function PaletteBlock({ type }) {
+  const { label } = blockSettings.value[type];
+  const icon = BLOCK_ICONS[type];
   const isSelected = tapSelected.value?.type === type;
 
   function handleDragStart(e) {
@@ -40,5 +34,5 @@ function PaletteBlock({ type, label, icon }) {
 }
 
 export default function PaletteBlockList() {
-  return BLOCKS.map(b => html`<${PaletteBlock} key=${b.type} ...${b} />`);
+  return BLOCK_TYPES.map(type => html`<${PaletteBlock} key=${type} type=${type} />`);
 }
