@@ -7,7 +7,8 @@
 ## Acceptance Criteria
 
 - [ ] Timeline spans 9:00am to 8:00pm in 30-minute slots
-- [ ] Five block types are available: Deep Work, Focus Work, Meetings, Admin, Buffer/Break
+- [ ] Five block types are available by default: Deep Work, Focus Work, Meetings, Admin, Buffer/Break
+- [ ] Block labels and descriptions are user-configurable via Settings (US-012)
 - [ ] On desktop, blocks can be dragged from the palette onto the timeline
 - [ ] On mobile, blocks can be tapped to select and then placed by tapping a time slot
 - [ ] Placed blocks snap to 30-minute slot boundaries
@@ -17,4 +18,4 @@
 
 ## Notes
 
-Block duration is controlled separately via the duration selector (US-006). The palette section heading updates to context-appropriate copy on mobile ("Tap to select" vs "Drag onto timeline").
+Block duration is controlled separately via the duration selector (US-006). The palette section heading updates to context-appropriate copy on mobile ("Tap to select" vs "Drag onto timeline"). Block names on the palette and legend update live when changed in Settings; blocks already placed on the timeline keep the label they were given at placement time.

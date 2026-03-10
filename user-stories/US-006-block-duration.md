@@ -7,12 +7,10 @@
 ## Acceptance Criteria
 
 - [ ] Four duration options: 30 min, 1 hr, 1.5 hr, 2 hr
-- [ ] The active duration is visually highlighted
-- [ ] Each palette block shows a badge indicating the current duration (e.g. "1h")
 - [ ] Newly placed blocks use the currently selected duration
 - [ ] Duration preference is saved to `localStorage` and restored on next visit
-- [ ] Changing duration updates all badge labels immediately
+- [ ] The default block size can be changed in Settings (US-012)
 
 ## Notes
 
-Duration is stored as minutes in `selectedDur`. The block duration can be changed after placement by dragging the resize handle (US-007).
+Duration is stored as minutes in the `selectedDur` signal. The default value (used when placing a new block) is configurable in Settings — the Settings screen provides the same four options (30 / 60 / 90 / 120 min). The block duration can be changed after placement by dragging the resize handle (US-007).
