@@ -6,6 +6,7 @@ import { renderWallpaper } from './lib/canvas.js';
 import {
   blocks, intention, currentTheme, currentDate,
   days, intentions, phoneModel,
+  blockSettings, icsPrefix, imgPrefix, selectedDur,
 } from './state/signals.js';
 import App from './components/App.js';
 
@@ -31,15 +32,23 @@ effect(() => {
 // Skip the first run (the data was just loaded from storage).
 let _storageReady = false;
 effect(() => {
-  const d = days.value;
-  const i = intentions.value;
-  const t = currentTheme.value;
-  const p = phoneModel.value;
+  const d  = days.value;
+  const i  = intentions.value;
+  const t  = currentTheme.value;
+  const p  = phoneModel.value;
+  const bs = blockSettings.value;
+  const ip = icsPrefix.value;
+  const mp = imgPrefix.value;
+  const sd = selectedDur.value;
   if (!_storageReady) { _storageReady = true; return; }
   try {
-    localStorage.setItem('tb_days',       JSON.stringify(d));
-    localStorage.setItem('tb_intentions', JSON.stringify(i));
-    localStorage.setItem('tb_theme',      t);
-    localStorage.setItem('tb_phone',      p);
+    localStorage.setItem('tb_days',           JSON.stringify(d));
+    localStorage.setItem('tb_intentions',     JSON.stringify(i));
+    localStorage.setItem('tb_theme',          t);
+    localStorage.setItem('tb_phone',          p);
+    localStorage.setItem('tb_block_settings', JSON.stringify(bs));
+    localStorage.setItem('tb_ics_prefix',     ip);
+    localStorage.setItem('tb_img_prefix',     mp);
+    localStorage.setItem('tb_dur',            String(sd));
   } catch (_) {}
 });

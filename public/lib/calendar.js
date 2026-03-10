@@ -1,4 +1,4 @@
-import { blocks, currentDate, intention } from '../state/signals.js';
+import { blocks, currentDate, intention, icsPrefix } from '../state/signals.js';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -61,7 +61,7 @@ export function downloadICS() {
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;
-  a.download = `timeblocks-${date.toISOString().slice(0, 10)}.ics`;
+  a.download = `${icsPrefix.value}-${date.toISOString().slice(0, 10)}.ics`;
   a.click();
   URL.revokeObjectURL(url);
 }
