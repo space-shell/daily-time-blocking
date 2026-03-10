@@ -452,6 +452,7 @@ canvas#wallCanvas {
   transition: border-color 0.2s;
 }
 .dl-btn:hover { border-color: var(--peak); color: var(--peak); }
+.cal-btn { background: none; cursor: pointer; }
 
 .hint-box {
   background: var(--surface);

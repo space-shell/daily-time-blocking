@@ -9,6 +9,7 @@ import {
 } from '../state/signals.js';
 import { renderWallpaper } from '../lib/canvas.js';
 import { onDragEnd }       from '../lib/drag.js';
+import { downloadICS }     from '../lib/calendar.js';
 import DragGhost           from './DragGhost.js';
 import PaletteBlockList    from './PaletteBlock.js';
 import Timeline            from './Timeline.js';
@@ -154,6 +155,9 @@ function PreviewPanel() {
             </optgroup>
           </select>
         </div>
+        <button class="dl-btn cal-btn" onClick=${downloadICS}>
+          \u2193 Export to calendar (.ics)
+        </button>
         <a class="dl-btn" id="dlBtn" href=${dlHref.value} download="timeblock.png">
           \u2193 Save to phone
         </a>
