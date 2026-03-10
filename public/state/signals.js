@@ -22,6 +22,25 @@ export const TYPE_COLORS = {
   buffer:   '#2e2e2e',
 };
 
+export const BLOCK_TYPES = ['peak', 'focus', 'meetings', 'admin', 'buffer'];
+
+export const BLOCK_ICONS = {
+  peak: '\u25C6', focus: '\u25CF', meetings: '\u25CE', admin: '\u25A3', buffer: '\u25CB',
+};
+
+export const BLOCK_COLOR_VARS = {
+  peak: 'var(--peak)', focus: 'var(--focus)', meetings: 'var(--meetings)',
+  admin: 'var(--admin)', buffer: 'var(--muted2)',
+};
+
+export const BLOCK_DEFAULTS = {
+  peak:     { label: 'Deep Work',      hint: 'best cognitive work' },
+  focus:    { label: 'Focus Work',     hint: 'steady effort' },
+  meetings: { label: 'Meetings',       hint: 'social energy' },
+  admin:    { label: 'Email & Admin',  hint: 'low-effort tasks' },
+  buffer:   { label: 'Buffer / Break', hint: 'transition time' },
+};
+
 // ── Helpers ───────────────────────────────────────────────────────
 export function isMobile() {
   return window.matchMedia('(max-width: 640px)').matches;
@@ -44,6 +63,10 @@ export const tapSelected   = signal(null);   // { type, label } | null
 export const activeTab     = signal('palette');
 export const dropGhostSlot = signal(null);   // { top, height } | null
 export const dlHref        = signal('#');
+export const settingsOpen  = signal(false);
+export const blockSettings = signal(JSON.parse(JSON.stringify(BLOCK_DEFAULTS)));
+export const icsPrefix     = signal('timeblocks');
+export const imgPrefix     = signal('timeblock');
 
 // ── Computed signals ──────────────────────────────────────────────
 export const dateKey = computed(() =>

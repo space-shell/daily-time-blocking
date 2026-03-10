@@ -465,6 +465,161 @@ canvas#wallCanvas {
 }
 .hint-box strong { color: var(--text); }
 
+/* ── SETTINGS ───────────────────────────────────────────────────── */
+.settings-open-btn {
+  margin-top: 0.9rem;
+  width: 100%;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted2);
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-family: inherit;
+  text-align: left;
+  letter-spacing: 0.04em;
+  transition: border-color 0.2s, color 0.2s;
+}
+.settings-open-btn:hover { border-color: var(--peak); color: var(--peak); }
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.settings-back {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+.settings-back:hover { border-color: var(--peak); color: var(--peak); }
+
+.settings-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin: 0;
+}
+
+.settings-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 640px;
+}
+
+.settings-section h3 {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin: 0 0 0.9rem;
+}
+
+.settings-block-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.settings-block-icon {
+  font-size: 0.9rem;
+  width: 1.2rem;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.settings-input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  flex: 1;
+  min-width: 0;
+  transition: border-color 0.2s;
+}
+.settings-input:focus { outline: none; border-color: var(--peak); }
+
+.settings-hint-input { color: var(--muted2); flex: 1.4; }
+
+.settings-reset-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted2);
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-family: inherit;
+  margin-top: 0.4rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+.settings-reset-btn:hover { border-color: var(--peak); color: var(--peak); }
+
+.settings-select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.settings-select:focus { outline: none; border-color: var(--peak); }
+
+.setting-row { margin-bottom: 1rem; }
+.setting-row:last-child { margin-bottom: 0; }
+
+.setting-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted2);
+  margin-bottom: 0.35rem;
+}
+
+.settings-filename-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settings-filename-suffix {
+  color: var(--muted2);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
 /* ── DRAG GHOST ─────────────────────────────────────────────────── */
 #dragGhost {
   position: fixed;
